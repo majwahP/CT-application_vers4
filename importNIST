@@ -1,0 +1,25 @@
+import json
+import requests #use conda install requests
+
+# URL for table1.json
+table1_url = "https://sbrisard.github.io/posts/20170531-Scrapy-ing_the_NIST_X-ray_Attenuation_Databases/table1.json"
+
+# URL for table3.json
+table3_url = "https://sbrisard.github.io/posts/20170531-Scrapy-ing_the_NIST_X-ray_Attenuation_Databases/table3.json"
+
+# Function to fetch JSON data from a URL
+def fetch_json_data(url):
+    response = requests.get(url)
+    return response.json()
+
+# Fetch JSON data for table1
+table1_data = fetch_json_data(table1_url)
+table1 = table1_data[0]
+
+# Fetch JSON data for table3
+table3_data = fetch_json_data(table3_url)
+table3 = dict(next(iter(item.items())) for item in table3_data)
+
+# Print selected information from the tables
+print(table1['1'])
+print(table3['1'][0:5])
