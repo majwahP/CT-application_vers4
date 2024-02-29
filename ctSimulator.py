@@ -49,11 +49,15 @@ class CTsimulator(Toplevel):
         self.mainButton.place(relx=0.01, rely=0.01,relheight=0.03, relwidth=0.07, anchor='nw')
         #frame to bpace dropdowns with object characteristics above object canvas
         self.dropDown_frame = Frame(master=self.content_frame)
-        self.dropDown_frame.place(relx=0.4, rely=0.1, relwidth=0.45, relheight=0.1, anchor="nw")   
+        self.dropDown_frame.place(relx=0.4, rely=0.1, relwidth=0.45, relheight=0.1, anchor="nw") 
+        #add options of how simulation should be peformed
+        self.noSimulationChecked= BooleanVar()
+        self.noSimulation = Checkbutton(master=self.content_frame, variable=self.noSimulationChecked, text="No simulation", command=self.on_checkbox_clicked)
+        self.noSimulation.place(relx=0.7, rely=0.8, relwidth=0.05, relheight=0.05, anchor="nw")  
         self.simulation_speed_fast_btn = Button(master=self.content_frame, text="Fast simulation", command=self.toggle_color, bg='gray')
-        self.simulation_speed_fast_btn.place(relx=0.7, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+        self.simulation_speed_fast_btn.place(relx=0.77, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
         self.simulation_speed_slow_btn = Button(master=self.content_frame, text="Slow simulation", command=self.toggle_color, bg='green')
-        self.simulation_speed_slow_btn.place(relx=0.8, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+        self.simulation_speed_slow_btn.place(relx=0.87, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
 
         
 
@@ -384,9 +388,18 @@ class CTsimulator(Toplevel):
             fast_simulation = TRUE
         elif self.simulation_speed_fast_btn.cget("bg") == 'gray':   
             fast_simulation = False
+        if self.noSimulationChecked.get():
+            no_simulation = TRUE
+            fast_simulation = None
+        else:
+            no_simulation=False    
+            if self.simulation_speed_fast_btn.cget("bg") == 'green':
+                fast_simulation = TRUE
+            elif self.simulation_speed_fast_btn.cget("bg") == 'gray':   
+                fast_simulation = False    
         if not rot_deg:
             rot_deg=180
-        self.new_window = CTsimulator_running_mode(attenuation, mA, kV, int(rot_deg), fast_simulation)
+        self.new_window = CTsimulator_running_mode(attenuation, mA, kV, int(rot_deg), fast_simulation, no_simulation)
         self.new_window.wait_window()
         
        
@@ -466,6 +479,14 @@ class CTsimulator(Toplevel):
         self.simulation_speed_fast_btn.config(bg=new_color)
         self.simulation_speed_slow_btn.config(bg=current_color)
     
+    def on_checkbox_clicked(self):
+        if self.noSimulationChecked.get():
+            self.simulation_speed_fast_btn.place_forget()
+            self.simulation_speed_slow_btn.place_forget()
+        else:
+            self.simulation_speed_fast_btn.place(relx=0.77, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+            self.simulation_speed_slow_btn.place(relx=0.87, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+
     def closeWindow(self):
         self.master.state('zoomed')
         self.destroy()
