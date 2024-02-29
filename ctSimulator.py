@@ -23,8 +23,9 @@ class CTsimulator(Toplevel):
         self.init_phantom_creation_functions()
         
         #button to start simulation with chosen values
+        
         self.goButon = Button(master=self.content_frame, text="Simulate!", command=self.go_to_simulator)
-        self.goButon.place(relx=0.7, rely=0.85, relwidth=0.25, relheight=0.12, anchor="nw")
+        self.goButon.place(relx=0.77, rely=0.85, relwidth=0.18, relheight=0.09, anchor="nw")
 
 
     #Functions
@@ -53,11 +54,11 @@ class CTsimulator(Toplevel):
         #add options of how simulation should be peformed
         self.noSimulationChecked= BooleanVar()
         self.noSimulation = Checkbutton(master=self.content_frame, variable=self.noSimulationChecked, text="No simulation", command=self.on_checkbox_clicked)
-        self.noSimulation.place(relx=0.7, rely=0.8, relwidth=0.05, relheight=0.05, anchor="nw")  
+        self.noSimulation.place(relx=0.745, rely=0.81, relwidth=0.08, relheight=0.04, anchor="nw")  
         self.simulation_speed_fast_btn = Button(master=self.content_frame, text="Fast simulation", command=self.toggle_color, bg='gray')
-        self.simulation_speed_fast_btn.place(relx=0.77, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+        self.simulation_speed_fast_btn.place(relx=0.82, rely=0.81, relwidth=0.065, relheight=0.04, anchor="nw")
         self.simulation_speed_slow_btn = Button(master=self.content_frame, text="Slow simulation", command=self.toggle_color, bg='green')
-        self.simulation_speed_slow_btn.place(relx=0.87, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+        self.simulation_speed_slow_btn.place(relx=0.885, rely=0.81, relwidth=0.065, relheight=0.04, anchor="nw")
 
         
 
@@ -65,9 +66,9 @@ class CTsimulator(Toplevel):
     def init_tube_settings_box(self):
 
         #Frame to but content related to the tube settings
-        self.tubeSettingsFrame = Frame(master=self.content_frame)
+        self.tubeSettingsFrame = Frame(master=self.content_frame)   #
         self.tubeSettingsFrame.pack()
-        self.tubeSettingsFrame.place(relx=0.03, rely=0.1,relheight= 0.85,relwidth= 0.3, anchor = "nw")
+        self.tubeSettingsFrame.place(relx=0.03, rely=0.07,relheight= 0.99,relwidth= 0.3, anchor = "nw")
 
         #settings related to x-ray tube (in the order they appear in the frame)
         #title
@@ -155,7 +156,6 @@ class CTsimulator(Toplevel):
         self.spectra_frame = Frame(self.tubeSettingsFrame, width=500, height=400)
         self.spectra_frame.pack(pady=5)
 
-        
 
 
         #simulation settings
@@ -238,7 +238,7 @@ class CTsimulator(Toplevel):
        
     def init_phantom_creation_functions(self):
         #canvas for objects
-        self.dragNdropCanvas = Canvas(master=self.content_frame, width=600, height=600)
+        self.dragNdropCanvas = Canvas(master=self.content_frame, width=540, height=540)
         self.dragNdropCanvas.pack()
         self.dragNdropCanvas.place(relx=0.4, rely=0.2, anchor = "nw")
         self.draw_square()
@@ -254,7 +254,11 @@ class CTsimulator(Toplevel):
         current_coords = self.dragNdropCanvas.coords(self.widget)
         width = current_coords[2] - current_coords[0]
         height = current_coords[3] - current_coords[1]
-        self.dragNdropCanvas.coords(self.widget, event.x, event.y, event.x + width, event.y + height)          
+        center_x = width / 2
+        center_y = height / 2
+        #self.dragNdropCanvas.coords(self.widget, event.x, event.y, event.x + width, event.y + height) 
+        self.dragNdropCanvas.coords(self.widget, event.x - center_x, event.y - center_y, event.x + center_x, event.y + center_y)
+         
 
     def delete_object(self, event, id):
         self.widget = id
@@ -265,8 +269,8 @@ class CTsimulator(Toplevel):
         #draw square to mark canvas
         self.square_x1 = 10
         self.square_y1 = 10
-        self.square_x2 = 599
-        self.square_y2 = 599
+        self.square_x2 = 539
+        self.square_y2 = 539
 
         # Draw the square
         self.dragNdropCanvas.create_rectangle(self.square_x1, self.square_y1, self.square_x2, self.square_y2, outline="black")
