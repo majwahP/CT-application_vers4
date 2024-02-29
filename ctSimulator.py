@@ -426,7 +426,7 @@ class CTsimulator(Toplevel):
                 color_code = self.get_mu(color)
                 for y in range(int(y1), int(y2)):
                     for x in range(int(x1), int(x2)):
-                        matrix[y][x] = matrix[y][x]+color_code
+                        matrix[y][x] = color_code
 
             elif self.dragNdropCanvas.type(obj) == "oval":
                 x1, y1, x2, y2 = self.dragNdropCanvas.coords(obj)
@@ -441,7 +441,7 @@ class CTsimulator(Toplevel):
                 for y in range(int(y1), int(y2)):
                     for x in range(int(x1), int(x2)):
                         if ((x - center_x) / radius_x)**2 + ((y - center_y) / radius_y)**2 <= 1:
-                            matrix[y][x] = matrix[y][x]+color_code
+                            matrix[y][x] = color_code
 
             elif self.dragNdropCanvas.type(obj) == "line":
                 coordinates = self.dragNdropCanvas.coords(obj)
@@ -461,7 +461,7 @@ class CTsimulator(Toplevel):
                         for k in range(-width // 2, (width + 1) // 2):
                             for l in range(-width // 2, (width + 1) // 2):
                                 if 0 <= y + k < 600 and 0 <= x + l < 600:
-                                    matrix[y + k][x + l] = matrix[y + k][x + l]+color_code
+                                    matrix[y + k][x + l] = color_code
 
         return matrix
     
