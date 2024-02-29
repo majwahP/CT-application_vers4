@@ -18,7 +18,7 @@ def calculatePos(root_window,new_window):
 
 def wiki_view():
     new_window = Wiki(app)
-    new_window.transient(app)
+    new_window.transient(app)   
     new_x, new_y = calculatePos(app,new_window)
     new_window.geometry("+{}+{}".format(new_x, new_y))
     new_window.wait_window()
