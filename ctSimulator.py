@@ -49,11 +49,15 @@ class CTsimulator(Toplevel):
         self.mainButton.place(relx=0.01, rely=0.01,relheight=0.03, relwidth=0.07, anchor='nw')
         #frame to bpace dropdowns with object characteristics above object canvas
         self.dropDown_frame = Frame(master=self.content_frame)
-        self.dropDown_frame.place(relx=0.4, rely=0.1, relwidth=0.45, relheight=0.1, anchor="nw")   
+        self.dropDown_frame.place(relx=0.4, rely=0.1, relwidth=0.45, relheight=0.1, anchor="nw") 
+        #add options of how simulation should be peformed
+        self.noSimulationChecked= BooleanVar()
+        self.noSimulation = Checkbutton(master=self.content_frame, variable=self.noSimulationChecked, text="No simulation", command=self.on_checkbox_clicked)
+        self.noSimulation.place(relx=0.7, rely=0.8, relwidth=0.05, relheight=0.05, anchor="nw")  
         self.simulation_speed_fast_btn = Button(master=self.content_frame, text="Fast simulation", command=self.toggle_color, bg='gray')
-        self.simulation_speed_fast_btn.place(relx=0.7, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+        self.simulation_speed_fast_btn.place(relx=0.77, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
         self.simulation_speed_slow_btn = Button(master=self.content_frame, text="Slow simulation", command=self.toggle_color, bg='green')
-        self.simulation_speed_slow_btn.place(relx=0.8, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+        self.simulation_speed_slow_btn.place(relx=0.87, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
 
         
 
@@ -282,7 +286,12 @@ class CTsimulator(Toplevel):
         material_options = [
             "al",
             "water",
-            "tissue"
+            "tissue",
+            "Air",
+            "Bone",
+            "Blood",
+            "Kidney",
+            "Lead"
         ]
 
         scale_options = [
@@ -366,7 +375,12 @@ class CTsimulator(Toplevel):
         color_codes = {
             "al": "gray",
             "water": "blue",
-            "tissue": "red"
+            "tissue": "pink",
+            "Air": "white",
+            "Bone": "light gray",
+            "Blood": "red",
+            "Kidney":"purple",
+            "Lead":"black"
             
         }
         return color_codes.get(material, 0)
@@ -384,9 +398,18 @@ class CTsimulator(Toplevel):
             fast_simulation = TRUE
         elif self.simulation_speed_fast_btn.cget("bg") == 'gray':   
             fast_simulation = False
+        if self.noSimulationChecked.get():
+            no_simulation = TRUE
+            fast_simulation = None
+        else:
+            no_simulation=False    
+            if self.simulation_speed_fast_btn.cget("bg") == 'green':
+                fast_simulation = TRUE
+            elif self.simulation_speed_fast_btn.cget("bg") == 'gray':   
+                fast_simulation = False    
         if not rot_deg:
             rot_deg=180
-        self.new_window = CTsimulator_running_mode(attenuation, mA, kV, int(rot_deg), fast_simulation)
+        self.new_window = CTsimulator_running_mode(attenuation, mA, kV, int(rot_deg), fast_simulation, no_simulation)
         self.new_window.wait_window()
         
        
@@ -403,7 +426,7 @@ class CTsimulator(Toplevel):
                 color_code = self.get_mu(color)
                 for y in range(int(y1), int(y2)):
                     for x in range(int(x1), int(x2)):
-                        matrix[y][x] = matrix[y][x]+color_code
+                        matrix[y][x] = color_code
 
             elif self.dragNdropCanvas.type(obj) == "oval":
                 x1, y1, x2, y2 = self.dragNdropCanvas.coords(obj)
@@ -418,7 +441,7 @@ class CTsimulator(Toplevel):
                 for y in range(int(y1), int(y2)):
                     for x in range(int(x1), int(x2)):
                         if ((x - center_x) / radius_x)**2 + ((y - center_y) / radius_y)**2 <= 1:
-                            matrix[y][x] = matrix[y][x]+color_code
+                            matrix[y][x] = color_code
 
             elif self.dragNdropCanvas.type(obj) == "line":
                 coordinates = self.dragNdropCanvas.coords(obj)
@@ -438,7 +461,7 @@ class CTsimulator(Toplevel):
                         for k in range(-width // 2, (width + 1) // 2):
                             for l in range(-width // 2, (width + 1) // 2):
                                 if 0 <= y + k < 600 and 0 <= x + l < 600:
-                                    matrix[y + k][x + l] = matrix[y + k][x + l]+color_code
+                                    matrix[y + k][x + l] = color_code
 
         return matrix
     
@@ -448,14 +471,12 @@ class CTsimulator(Toplevel):
         # define mu for each color that depeds on the material chosen
         color_codes = {
             "blue": (math.log(2)/self.spectra.get_hvl('Water, Liquid')),  
-            "red": (math.log(2)/self.spectra.get_hvl('Tissue, Soft (ICRP)')),
-            "green": 3,
-            "pink": 4,
-            "purple": 5,
-            "white": 6,
-            "orange": 7,
-            "black": 8,
-            "yellow": 9,
+            "red": (math.log(2)/self.spectra.get_hvl('Blood (ICRP)')),
+            "pink": (math.log(2)/self.spectra.get_hvl('Tissue, Soft (ICRP)')),
+            "light gray": (math.log(2)/self.spectra.get_hvl('Bone Substitute (SB3)')),
+            "white": (math.log(2)/self.spectra.get_hvl('Air Dry (Near Sea Level)')),  
+            "purple": (math.log(2)/self.spectra.get_hvl('Kidney (ICRU)')),
+            "black": (math.log(2)/self.spectra.get_hvl('Pb')),
             "gray": (math.log(2)/self.spectra.get_hvl('Al')),
         }
         return color_codes.get(color, 0)
@@ -466,6 +487,14 @@ class CTsimulator(Toplevel):
         self.simulation_speed_fast_btn.config(bg=new_color)
         self.simulation_speed_slow_btn.config(bg=current_color)
     
+    def on_checkbox_clicked(self):
+        if self.noSimulationChecked.get():
+            self.simulation_speed_fast_btn.place_forget()
+            self.simulation_speed_slow_btn.place_forget()
+        else:
+            self.simulation_speed_fast_btn.place(relx=0.77, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+            self.simulation_speed_slow_btn.place(relx=0.87, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+
     def closeWindow(self):
         self.master.state('zoomed')
         self.destroy()

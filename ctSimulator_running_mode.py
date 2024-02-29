@@ -9,7 +9,7 @@ import math
 import time
 
 class CTsimulator_running_mode(Toplevel):
-    def __init__(self, attenuation_cof, mA, kV, total_rotation, fast_simulation):
+    def __init__(self, attenuation_cof, mA, kV, total_rotation, fast_simulation, no_simulation):
         super().__init__()
         
         self.init_window()
@@ -20,13 +20,20 @@ class CTsimulator_running_mode(Toplevel):
         self.mA = mA
         self.kV = kV
         self.total_rot = total_rotation
-        if fast_simulation:
-            self.simulation_speed = 20
+        if no_simulation:
+            self.no_simulation = TRUE
         else:
-            self.simulation_speed = 150
+            self.no_simulation = FALSE    
+            if fast_simulation:
+                self.simulation_speed = 20
+            else:
+                self.simulation_speed = 150
         self.perform_CT()
         self.init_imageframe()
-        self.start_animation()
+        if self.no_simulation:
+            self.reconstructedimage.configure(image=self.recon_image)
+        else:    
+            self.start_animation()
         
 
     def init_window(self):
