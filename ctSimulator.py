@@ -286,7 +286,12 @@ class CTsimulator(Toplevel):
         material_options = [
             "al",
             "water",
-            "tissue"
+            "tissue",
+            "Air",
+            "Bone",
+            "Blood",
+            "Kidney",
+            "Lead"
         ]
 
         scale_options = [
@@ -370,7 +375,12 @@ class CTsimulator(Toplevel):
         color_codes = {
             "al": "gray",
             "water": "blue",
-            "tissue": "red"
+            "tissue": "pink",
+            "Air": "white",
+            "Bone": "light gray",
+            "Blood": "red",
+            "Kidney":"purple",
+            "Lead":"black"
             
         }
         return color_codes.get(material, 0)
@@ -461,14 +471,12 @@ class CTsimulator(Toplevel):
         # define mu for each color that depeds on the material chosen
         color_codes = {
             "blue": (math.log(2)/self.spectra.get_hvl('Water, Liquid')),  
-            "red": (math.log(2)/self.spectra.get_hvl('Tissue, Soft (ICRP)')),
-            "green": 3,
-            "pink": 4,
-            "purple": 5,
-            "white": 6,
-            "orange": 7,
-            "black": 8,
-            "yellow": 9,
+            "red": (math.log(2)/self.spectra.get_hvl('Blood (ICRP)')),
+            "pink": (math.log(2)/self.spectra.get_hvl('Tissue, Soft (ICRP)')),
+            "light gray": (math.log(2)/self.spectra.get_hvl('Bone Substitute (SB3)')),
+            "white": (math.log(2)/self.spectra.get_hvl('Air Dry (Near Sea Level)')),  
+            "purple": (math.log(2)/self.spectra.get_hvl('Kidney (ICRU)')),
+            "black": (math.log(2)/self.spectra.get_hvl('Pb')),
             "gray": (math.log(2)/self.spectra.get_hvl('Al')),
         }
         return color_codes.get(color, 0)
