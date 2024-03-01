@@ -25,7 +25,7 @@ class CTsimulator(Toplevel):
         #button to start simulation with chosen values
         
         self.goButon = Button(master=self.content_frame, text="Simulate!", command=self.go_to_simulator)
-        self.goButon.place(relx=0.77, rely=0.85, relwidth=0.18, relheight=0.09, anchor="nw")
+        self.goButon.place(relx=0.77, rely=0.88, relwidth=0.18, relheight=0.09, anchor="nw")
 
 
     #Functions
@@ -40,8 +40,8 @@ class CTsimulator(Toplevel):
         self.protocol("WM_DELETE_WINDOW", self.closeWindow)
         self.start_width = self.winfo_width()
         self.start_height = self.winfo_height()
-        
 
+        
     def init_window_content(self):
         self.header = Label(master=self.content_frame, text="Setup your CT scan", font=("Arial",25))
         self.header.pack( pady=1,anchor="n")
@@ -50,15 +50,17 @@ class CTsimulator(Toplevel):
         self.mainButton.place(relx=0.01, rely=0.01,relheight=0.03, relwidth=0.07, anchor='nw')
         #frame to bpace dropdowns with object characteristics above object canvas
         self.dropDown_frame = Frame(master=self.content_frame)
-        self.dropDown_frame.place(relx=0.4, rely=0.1, relwidth=0.45, relheight=0.1, anchor="nw") 
+        self.dropDown_frame.place(relx=0.4, rely=0.09, relwidth=0.45, relheight=0.08, anchor="nw") 
+        self.shape_dimensions_frame = Frame(master=self.content_frame)
+        self.shape_dimensions_frame.place(relx = 0.4, rely = 0.17, relwidth=0.45, relheight=0.04, anchor="nw")
         #add options of how simulation should be peformed
         self.noSimulationChecked= BooleanVar()
         self.noSimulation = Checkbutton(master=self.content_frame, variable=self.noSimulationChecked, text="No simulation", command=self.on_checkbox_clicked)
-        self.noSimulation.place(relx=0.745, rely=0.81, relwidth=0.08, relheight=0.04, anchor="nw")  
+        self.noSimulation.place(relx=0.745, rely=0.84, relwidth=0.08, relheight=0.04, anchor="nw")  
         self.simulation_speed_fast_btn = Button(master=self.content_frame, text="Fast simulation", command=self.toggle_color, bg='gray')
-        self.simulation_speed_fast_btn.place(relx=0.82, rely=0.81, relwidth=0.065, relheight=0.04, anchor="nw")
+        self.simulation_speed_fast_btn.place(relx=0.82, rely=0.84, relwidth=0.065, relheight=0.04, anchor="nw")
         self.simulation_speed_slow_btn = Button(master=self.content_frame, text="Slow simulation", command=self.toggle_color, bg='green')
-        self.simulation_speed_slow_btn.place(relx=0.885, rely=0.81, relwidth=0.065, relheight=0.04, anchor="nw")
+        self.simulation_speed_slow_btn.place(relx=0.885, rely=0.84, relwidth=0.065, relheight=0.04, anchor="nw")
 
         
 
@@ -235,14 +237,30 @@ class CTsimulator(Toplevel):
         self.canvas = FigureCanvasTkAgg(fig, master=self.spectra_frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(side=TOP,fill=BOTH, expand=False)       
-       
+
+
+
     def init_phantom_creation_functions(self):
         #canvas for objects
-        self.dragNdropCanvas = Canvas(master=self.content_frame, width=540, height=540)
-        self.dragNdropCanvas.pack()
-        self.dragNdropCanvas.place(relx=0.4, rely=0.2, anchor = "nw")
-        self.draw_square()
+        self.dragNdropCanvas = Canvas(self.content_frame)
+        self.dragNdropCanvas.place(relx=0.4, rely=0.2, anchor="nw", width=550, height=550)
+        self.content_frame.bind('<Configure>', self.on_resize)
+
+        #self.draw_square()
+
+        self.square_id = self.dragNdropCanvas.create_rectangle(10, 10, 549, 549, tag="square")
+        self.dragNdropCanvas.bind("<Configure>", self.update_square)
+
         self.create_dropdown_opt()
+       
+       
+    def on_resize(self, event):
+        # Calculates new dimensions based on the event width and height
+        new_width = self.content_frame.winfo_width() * 0.5
+        new_height = self.content_frame.winfo_height() * 0.55
+
+        self.dragNdropCanvas.place_configure(width=new_width, height=new_height)      
+
 
     #Drag and drop Functions
     def start_drag(self, event, id):
@@ -265,15 +283,26 @@ class CTsimulator(Toplevel):
         self.dragNdropCanvas.delete(self.widget)   
        
    
-    def draw_square(self):
-        #draw square to mark canvas
-        self.square_x1 = 10
-        self.square_y1 = 10
-        self.square_x2 = 539
-        self.square_y2 = 539
+    def update_square(self, event=None):
+        # Calculate new coordinates based on the canvas size
+        canvas_width = event.width
+        canvas_height = event.height
 
+        # Maintain a margin or proportion relative to the canvas size
+        square_x1 = 10
+        square_y1 = 10  # Margin from top-left
+        square_x2 = canvas_width - 4  # Margin from right
+        square_y2 = canvas_height - 3  # Margin from bottom
+
+        # Update the square's coordinates
+        self.dragNdropCanvas.coords(self.square_id, square_x1, square_y1, square_x2, square_y2)
+
+        #self.square_x1 = 10
+        #self.square_y1 = 10
+        #self.square_x2 = 539
+        #self.square_y2 = 539
         # Draw the square
-        self.dragNdropCanvas.create_rectangle(self.square_x1, self.square_y1, self.square_x2, self.square_y2, outline="black")
+        #self.dragNdropCanvas.create_rectangle(self.square_x1, self.square_y1, self.square_x2, self.square_y2, outline="black")
 
 
     def create_dropdown_opt(self):
@@ -346,65 +375,55 @@ class CTsimulator(Toplevel):
 
         if self.selected_option_shape.get() == "rectangle":
 
-            if hasattr(self, 'option_drop_line_width') or hasattr(self, "option_drop_line_heigh") or hasattr(self, 'option_drop_oval_width') or hasattr(self, 'option_drop_oval_height'):
-                self.option_drop_line_width.destroy()
-                self.option_drop_line_height.destroy()
-                self.option_drop_oval_width.destroy()
-                self.option_drop_oval_height.destroy()
+            for widget in self.shape_dimensions_frame.winfo_children():
+                widget.destroy()
 
             # Width and Height options for Rectangle
             self.selected_rectangle_width = StringVar()
             self.selected_rectangle_width.set("Width")
-            self.option_drop_rectangle_width = OptionMenu(self.dropDown_frame, self.selected_rectangle_width, * dimentions_options)
+            self.option_drop_rectangle_width = OptionMenu(self.shape_dimensions_frame, self.selected_rectangle_width, * dimentions_options)
             self.option_drop_rectangle_width.pack(side=LEFT)
 
             self.selected_rectangle_height = StringVar()
             self.selected_rectangle_height.set("Height")
-            self.option_drop_rectangle_height = OptionMenu(self.dropDown_frame, self.selected_rectangle_height, * dimentions_options)
+            self.option_drop_rectangle_height = OptionMenu(self.shape_dimensions_frame, self.selected_rectangle_height, * dimentions_options)
             self.option_drop_rectangle_height.pack(side=LEFT)
 
         elif self.selected_option_shape.get() == "oval":
 
-            if hasattr(self, 'option_drop_line_width') or hasattr(self, "option_drop_line_heigh") or hasattr(self, 'option_drop_rectangle_width') or hasattr(self, 'option_drop_rectangle_height'):
-                self.option_drop_line_width.destroy()
-                self.option_drop_line_height.destroy()
-                self.option_drop_rectangle_width.destroy()
-                self.option_drop_rectangle_height.destroy()
+            for widget in self.shape_dimensions_frame.winfo_children():
+                widget.destroy()
 
             # Width and Height options for Rectangle
             self.selected_oval_width = StringVar()
             self.selected_oval_width.set("Width")
-            self.option_drop_oval_width = OptionMenu(self.dropDown_frame, self.selected_oval_width, * dimentions_options)
+            self.option_drop_oval_width = OptionMenu(self.shape_dimensions_frame, self.selected_oval_width, * dimentions_options)
             self.option_drop_oval_width.pack(side=LEFT)
 
             self.selected_oval_height = StringVar()
             self.selected_oval_height.set("Height")
-            self.option_drop_oval_height = OptionMenu(self.dropDown_frame, self.selected_oval_height, * dimentions_options)
+            self.option_drop_oval_height = OptionMenu(self.shape_dimensions_frame, self.selected_oval_height, * dimentions_options)
             self.option_drop_oval_height.pack(side=LEFT)
 
 
         elif self.selected_option_shape.get() == "vertical line":
 
-            if hasattr(self, 'option_drop_rectangle_width') or hasattr(self, 'option_drop_rectangle_height'):
-                self.option_drop_rectangle_width.destroy()
-                self.option_drop_rectangle_height.destroy()
-                #self.option_drop_line_width.destroy()
+            for widget in self.shape_dimensions_frame.winfo_children():
+                widget.destroy()
 
             self.selected_option_line_height = StringVar()
             self.selected_option_line_height.set("Height")
-            self.option_drop_line_height = OptionMenu(self.dropDown_frame, self.selected_option_line_height, *dimentions_options)
+            self.option_drop_line_height = OptionMenu(self.shape_dimensions_frame, self.selected_option_line_height, *dimentions_options)
             self.option_drop_line_height.pack(side=LEFT)
         
         elif self.selected_option_shape.get() == "horizontal line":
             
-            if hasattr(self, 'option_drop_rectangle_width') or hasattr(self, 'option_drop_rectangle_height') or hasattr(self, 'option_drop_line_height') :
-                self.option_drop_rectangle_width.destroy()
-                self.option_drop_rectangle_height.destroy()
-                self.option_drop_line_height.destroy()
+            for widget in self.shape_dimensions_frame.winfo_children():
+                widget.destroy()
             
             self.selected_option_line_width = StringVar()
             self.selected_option_line_width.set("Width")
-            self.option_drop_line_width = OptionMenu(self.dropDown_frame, self.selected_option_line_width, *dimentions_options)
+            self.option_drop_line_width = OptionMenu(self.shape_dimensions_frame, self.selected_option_line_width, *dimentions_options)
             self.option_drop_line_width.pack(side=LEFT)
                 
         
