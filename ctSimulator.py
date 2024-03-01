@@ -311,7 +311,9 @@ class CTsimulator(Toplevel):
         #shape drop down
         self.selected_option_shape = StringVar()
         self.selected_option_shape.set("Shape")
-        option_drop_menu_shape = OptionMenu(self.dropDown_frame, self.selected_option_shape, *shape_options)
+        #option_drop_menu_shape = OptionMenu(self.dropDown_frame, self.selected_option_shape, *shape_options)
+        option_drop_menu_shape = OptionMenu(self.dropDown_frame, self.selected_option_shape, *shape_options, command=self.update_shape_options)
+
         option_drop_menu_shape.pack(side=LEFT)
         option_drop_menu_shape.config(height=17)
 
@@ -337,6 +339,76 @@ class CTsimulator(Toplevel):
         self.info_delete_object = Label(master=self.dropDown_frame, text="Delete an object by right-clicking on it")
         self.info_delete_object.pack(side=LEFT, anchor=S)
        
+    
+    def update_shape_options(self, *args):
+                
+        dimentions_options = [2, 4, 6, 8, 10]
+
+        if self.selected_option_shape.get() == "rectangle":
+
+            if hasattr(self, 'option_drop_line_width') or hasattr(self, "option_drop_line_heigh") or hasattr(self, 'option_drop_oval_width') or hasattr(self, 'option_drop_oval_height'):
+                self.option_drop_line_width.destroy()
+                self.option_drop_line_height.destroy()
+                self.option_drop_oval_width.destroy()
+                self.option_drop_oval_height.destroy()
+
+            # Width and Height options for Rectangle
+            self.selected_rectangle_width = StringVar()
+            self.selected_rectangle_width.set("Width")
+            self.option_drop_rectangle_width = OptionMenu(self.dropDown_frame, self.selected_rectangle_width, * dimentions_options)
+            self.option_drop_rectangle_width.pack(side=LEFT)
+
+            self.selected_rectangle_height = StringVar()
+            self.selected_rectangle_height.set("Height")
+            self.option_drop_rectangle_height = OptionMenu(self.dropDown_frame, self.selected_rectangle_height, * dimentions_options)
+            self.option_drop_rectangle_height.pack(side=LEFT)
+
+        elif self.selected_option_shape.get() == "oval":
+
+            if hasattr(self, 'option_drop_line_width') or hasattr(self, "option_drop_line_heigh") or hasattr(self, 'option_drop_rectangle_width') or hasattr(self, 'option_drop_rectangle_height'):
+                self.option_drop_line_width.destroy()
+                self.option_drop_line_height.destroy()
+                self.option_drop_rectangle_width.destroy()
+                self.option_drop_rectangle_height.destroy()
+
+            # Width and Height options for Rectangle
+            self.selected_oval_width = StringVar()
+            self.selected_oval_width.set("Width")
+            self.option_drop_oval_width = OptionMenu(self.dropDown_frame, self.selected_oval_width, * dimentions_options)
+            self.option_drop_oval_width.pack(side=LEFT)
+
+            self.selected_oval_height = StringVar()
+            self.selected_oval_height.set("Height")
+            self.option_drop_oval_height = OptionMenu(self.dropDown_frame, self.selected_oval_height, * dimentions_options)
+            self.option_drop_oval_height.pack(side=LEFT)
+
+
+        elif self.selected_option_shape.get() == "vertical line":
+
+            if hasattr(self, 'option_drop_rectangle_width') or hasattr(self, 'option_drop_rectangle_height'):
+                self.option_drop_rectangle_width.destroy()
+                self.option_drop_rectangle_height.destroy()
+                #self.option_drop_line_width.destroy()
+
+            self.selected_option_line_height = StringVar()
+            self.selected_option_line_height.set("Height")
+            self.option_drop_line_height = OptionMenu(self.dropDown_frame, self.selected_option_line_height, *dimentions_options)
+            self.option_drop_line_height.pack(side=LEFT)
+        
+        elif self.selected_option_shape.get() == "horizontal line":
+            
+            if hasattr(self, 'option_drop_rectangle_width') or hasattr(self, 'option_drop_rectangle_height') or hasattr(self, 'option_drop_line_height') :
+                self.option_drop_rectangle_width.destroy()
+                self.option_drop_rectangle_height.destroy()
+                self.option_drop_line_height.destroy()
+            
+            self.selected_option_line_width = StringVar()
+            self.selected_option_line_width.set("Width")
+            self.option_drop_line_width = OptionMenu(self.dropDown_frame, self.selected_option_line_width, *dimentions_options)
+            self.option_drop_line_width.pack(side=LEFT)
+                
+        
+
 
       
     
