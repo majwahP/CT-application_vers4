@@ -157,6 +157,7 @@ class CTsimulator(Toplevel):
         #Frame to place image of the spectra
         self.spectra_frame = Frame(self.tubeSettingsFrame, width=500, height=400)
         self.spectra_frame.pack(pady=5)
+        self.spectra_frame.bind('<Configure>', self.on_resize)
 
 
 
@@ -166,6 +167,7 @@ class CTsimulator(Toplevel):
 
         #Choose the total rotation of scan
         self.total_rot_Frame = Frame(master=self.tubeSettingsFrame, height=50)
+        self.total_rot_Frame.bind('<Configure>', self.on_resize)
         self.total_rot_Frame.pack(padx=10, side=TOP, anchor="nw")
         self.label_tot_rot = Label(master=self.total_rot_Frame,text="Total rotation angle [Deg]")
         self.label_tot_rot.pack(side=LEFT)
@@ -257,7 +259,7 @@ class CTsimulator(Toplevel):
     def on_resize(self, event):
         # Calculates new dimensions based on the event width and height
         new_width = self.content_frame.winfo_width() * 0.5
-        new_height = self.content_frame.winfo_height() * 0.55
+        new_height = self.content_frame.winfo_height() * 0.64
 
         self.dragNdropCanvas.place_configure(width=new_width, height=new_height)      
 
@@ -290,7 +292,7 @@ class CTsimulator(Toplevel):
 
         # Maintain a margin or proportion relative to the canvas size
         square_x1 = 10
-        square_y1 = 10  # Margin from top-left
+        square_y1 = 10
         square_x2 = canvas_width - 4  # Margin from right
         square_y2 = canvas_height - 3  # Margin from bottom
 
@@ -371,14 +373,13 @@ class CTsimulator(Toplevel):
     
     def update_shape_options(self, *args):
                 
-        dimentions_options = [2, 4, 6, 8, 10]
+        dimentions_options = [1, 2, 3, 4, 5]
 
         if self.selected_option_shape.get() == "rectangle":
 
             for widget in self.shape_dimensions_frame.winfo_children():
                 widget.destroy()
 
-            # Width and Height options for Rectangle
             self.selected_rectangle_width = StringVar()
             self.selected_rectangle_width.set("Width")
             self.option_drop_rectangle_width = OptionMenu(self.shape_dimensions_frame, self.selected_rectangle_width, * dimentions_options)
@@ -388,6 +389,36 @@ class CTsimulator(Toplevel):
             self.selected_rectangle_height.set("Height")
             self.option_drop_rectangle_height = OptionMenu(self.shape_dimensions_frame, self.selected_rectangle_height, * dimentions_options)
             self.option_drop_rectangle_height.pack(side=LEFT)
+        
+        elif self.selected_option_shape.get() == "45 deg line":
+
+            for widget in self.shape_dimensions_frame.winfo_children():
+                widget.destroy()
+
+            self.selected_option_deg_height = StringVar()
+            self.selected_option_deg_height.set("Length")
+            self.option_drop_deg_height = OptionMenu(self.shape_dimensions_frame, self.selected_option_deg_height, *dimentions_options)
+            self.option_drop_deg_height.pack(side=LEFT)
+
+        elif self.selected_option_shape.get() == "vertical line":
+
+            for widget in self.shape_dimensions_frame.winfo_children():
+                widget.destroy()
+
+            self.selected_option_line_height = StringVar()
+            self.selected_option_line_height.set("Length")
+            self.option_drop_line_height = OptionMenu(self.shape_dimensions_frame, self.selected_option_line_height, *dimentions_options)
+            self.option_drop_line_height.pack(side=LEFT)
+        
+        elif self.selected_option_shape.get() == "horizontal line":
+            
+            for widget in self.shape_dimensions_frame.winfo_children():
+                widget.destroy()
+            
+            self.selected_option_line_width = StringVar()
+            self.selected_option_line_width.set("Length")
+            self.option_drop_line_width = OptionMenu(self.shape_dimensions_frame, self.selected_option_line_width, *dimentions_options)
+            self.option_drop_line_width.pack(side=LEFT)
 
         elif self.selected_option_shape.get() == "oval":
 
@@ -404,32 +435,8 @@ class CTsimulator(Toplevel):
             self.selected_oval_height.set("Height")
             self.option_drop_oval_height = OptionMenu(self.shape_dimensions_frame, self.selected_oval_height, * dimentions_options)
             self.option_drop_oval_height.pack(side=LEFT)
-
-
-        elif self.selected_option_shape.get() == "vertical line":
-
-            for widget in self.shape_dimensions_frame.winfo_children():
-                widget.destroy()
-
-            self.selected_option_line_height = StringVar()
-            self.selected_option_line_height.set("Height")
-            self.option_drop_line_height = OptionMenu(self.shape_dimensions_frame, self.selected_option_line_height, *dimentions_options)
-            self.option_drop_line_height.pack(side=LEFT)
-        
-        elif self.selected_option_shape.get() == "horizontal line":
-            
-            for widget in self.shape_dimensions_frame.winfo_children():
-                widget.destroy()
-            
-            self.selected_option_line_width = StringVar()
-            self.selected_option_line_width.set("Width")
-            self.option_drop_line_width = OptionMenu(self.shape_dimensions_frame, self.selected_option_line_width, *dimentions_options)
-            self.option_drop_line_width.pack(side=LEFT)
                 
         
-
-
-      
     
     def addObject(self):
         #find chosen characteristics
@@ -448,15 +455,25 @@ class CTsimulator(Toplevel):
 
         #Create the object   
         if shape == "rectangle":
-            object_id = self.dragNdropCanvas.create_rectangle(100, 100, 100+(scale/2)*150, 100+(scale/2)*150, fill=self.get_material_color(material))
+            rec_width = int(self.selected_rectangle_width.get()) * 50
+            rec_height = int(self.selected_rectangle_height.get()) * 50
+            object_id = self.dragNdropCanvas.create_rectangle(100, 100, 100 + rec_width, 100 + rec_height, fill=self.get_material_color(material))
+
         if shape == "45 deg line":
-            object_id =self.dragNdropCanvas.create_line(100, 100, 100+(scale/2)*150, 100+(scale/2)*150, width=5, fill=self.get_material_color(material))
+            deg_length = int(self.selected_option_deg_height.get()) * 50
+            object_id = self.dragNdropCanvas.create_line(100, 100, 100 + deg_length, 100 + deg_length, width=5, fill=self.get_material_color(material))
+        
         if shape == "vertical line":
-            object_id =self.dragNdropCanvas.create_line(100, 100, 100, 100+(scale/2)*150, width=5, fill=self.get_material_color(material))    
+            ver_length = int(self.selected_option_line_height.get()) *50
+            object_id = self.dragNdropCanvas.create_line(100, 100, 100, 100 + ver_length, width=5, fill=self.get_material_color(material))
+
         if shape == "horizontal line":
-            object_id =self.dragNdropCanvas.create_line(100, 100, 100+(scale/2)*150, 100, width=5, fill=self.get_material_color(material))        
+            horiz_length = int (self.selected_option_line_width.get()) * 50
+            object_id = self.dragNdropCanvas.create_line(100, 100, 100 + horiz_length, 100, width=5, fill=self.get_material_color(material))
         if shape == "oval":
-            object_id =self.dragNdropCanvas.create_oval(100, 100, 100+(scale/2)*150, 100+(scale/2)*150, fill=self.get_material_color(material))
+            oval_width = int(self.selected_oval_width.get()) * 50
+            oval_height = int(self.selected_oval_height.get()) * 50
+            object_id = self.dragNdropCanvas.create_oval(100, 100, 100 + oval_width, 100 + oval_height, fill=self.get_material_color(material))
 
         #bind action functions to the object
         self.dragNdropCanvas.tag_bind(object_id, "<ButtonPress-1>", lambda event, id=object_id: self.start_drag(event, id))
@@ -464,6 +481,7 @@ class CTsimulator(Toplevel):
         self.dragNdropCanvas.tag_bind(object_id,"<ButtonPress-3>", lambda event, id=object_id: self.delete_object(event, id))
         #add object to objectarray
         self.phantom_objects.append(self.dragNdropCanvas.find_withtag(object_id)[0])
+        
 
     def get_material_color(self, material):
         # Define a color to each material
