@@ -20,7 +20,8 @@ class Wiki(Toplevel):
         self.attributes('-topmost', True)
 
         self.createExitButton()       
-        self.createScrollFrame()    
+        self.createScrollFrame()  
+        #self.createRightSide()  
         self.initRightSide()    
         
         tube = Xray_Tube()  
@@ -76,9 +77,18 @@ class Wiki(Toplevel):
             self.update_wiki(Topic)
         else:
             self.canvas = Canvas(self.right_frame, bg="gray")
-            self.canvas.pack(fill="both", expand=True)
+            self.canvas.place(relx=0, rely=0, anchor="nw", width=920, height=720)
+            self.content_frame.bind('<Configure>', self.on_resize)
+            #self.canvas.pack(fill="both", expand=True)
             self.update_wiki(Topic)
         
+    def on_resize(self, event):
+        new_width = self.content_frame.winfo_width() * 0.6
+        new_height = self.content_frame.winfo_height() * 0.6
+
+        self.canvas.place_configure(width=new_width, height=new_height)      
+
+   
     def update_wiki(self,some_topic):
         self.canvas.delete("all")
         if some_topic.get_title() == "X-ray Tube":
@@ -105,19 +115,23 @@ class Wiki(Toplevel):
         self.canvas.create_text(10, 10, anchor="nw", text=title, font=("Arial", 16, "bold"))
 
         # Create a frame to hold the images
-        self.image_frame = tk.Frame(self.canvas)
+        self.image_frame = tk.Frame(self.canvas, bg = "red")
         self.canvas.create_window((0, 0), window=self.image_frame, anchor="nw")
-        
+        #self.image_frame.bind('<Configure>', self.on_resize_two)
+       
         image_width = 730   
         image_height = 850  
 
         img_offset = 0 
         for image in images:
             resized_image = image.resize((image_width, image_height), Image.ANTIALIAS)
-            tk_image = ImageTk.PhotoImage(resized_image)  
-            label = tk.Label(self.image_frame, image=tk_image)
-            label.image = tk_image  
+            self.tk_image = ImageTk.PhotoImage(resized_image)  
+            label = tk.Label(self.image_frame, image=self.tk_image)
+            label.image = self.tk_image  
             label.pack(fill='both',expand=True,pady=5)  
+            self.canvas.bind('<Configure>', self.on_resize_two)
+
+
 
         if not hasattr(self, 'scrollbar'):
             self.scrollbar = tk.Scrollbar(self.canvas, orient="vertical", command=self.canvas.yview)
@@ -129,6 +143,20 @@ class Wiki(Toplevel):
             self.image_frame.bind_all("<MouseWheel>", self._on_mousewheel)  # macOS and Linux
             self.image_frame.bind_all("<Button-4>", self._on_mousewheel)    # Windows
             self.image_frame.bind_all("<Button-5>", self._on_mousewheel) 
+    
+    def on_resize_two(self, event):
+        # Calculate the new size while maintaining the aspect ratio
+        new_width = event.width
+        new_height = int((new_width / self.tk_image.width) * self.tk_image.height)
+
+   
+    '''def on_resize_two(self, event):
+        # Calculates new dimensions based on the event width and height
+        new_width = self.right_frame.winfo_width() * 0.9
+        new_height = self.right_frame.winfo_height() * 0.9
+
+        self.image_frame(width=new_width, height=new_height) '''     
+    
     
     def on_frame_configure(self, event=None):
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
