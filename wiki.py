@@ -7,6 +7,8 @@ from reconstruction import Reconstruction
 from PIL import Image, ImageTk
 import tkinter as tk
 
+button_color = '#6CA6CD' 
+button_text_color = 'white'
 
 class Wiki(Toplevel):
     
@@ -23,26 +25,19 @@ class Wiki(Toplevel):
         
         tube = Xray_Tube()  
         title_text = tube.get_title() 
-        print(tube.get_title())
         self.buttons[0].configure(text=title_text, command=lambda tube=tube: self.createRightSide(tube))
 
         sino = Sinogram()  
         title_text2 = sino.get_title() 
-        print(title_text2)
         self.buttons[1].configure(text=title_text2, command=lambda sino=sino: self.createRightSide(sino))
-        self.geometry("720x480")
 
         ct = CT_scanning()  
         title_text3 = ct.get_title() 
-        print(title_text3)
         self.buttons[2].configure(text=title_text3, command=lambda ct = ct: self.createRightSide(ct))
-        self.geometry("720x480")
 
         rec = Reconstruction()  
         title_text4 = rec.get_title() 
-        print(title_text4)
         self.buttons[3].configure(text=title_text4, command=lambda rec=rec: self.createRightSide(rec))
-        self.geometry("720x480")
     
     
     def close_window(self):
@@ -50,7 +45,7 @@ class Wiki(Toplevel):
 
     
     def createExitButton(self):
-        self.exit_button = Button(self.content_frame, height=10,width=10, text="\u2190", font=("Arial", 12), command=self.close_window)
+        self.exit_button = Button(self.content_frame,bg=button_color,fg=button_text_color, height=5,width=5, text="\u2190", font=("Arial", 12), command=self.close_window)
         self.exit_button.pack(side="left",anchor="nw", padx=5, pady=5) 
         
     def createScrollFrame(self):
@@ -113,8 +108,8 @@ class Wiki(Toplevel):
         self.image_frame = tk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window=self.image_frame, anchor="nw")
         
-        image_width = 380
-        image_height = 200
+        image_width = 730   
+        image_height = 850  
 
         img_offset = 0 
         for image in images:
@@ -122,7 +117,7 @@ class Wiki(Toplevel):
             tk_image = ImageTk.PhotoImage(resized_image)  
             label = tk.Label(self.image_frame, image=tk_image)
             label.image = tk_image  
-            label.pack(anchor="nw", pady=5)  
+            label.pack(fill='both',expand=True,pady=5)  
 
         if not hasattr(self, 'scrollbar'):
             self.scrollbar = tk.Scrollbar(self.canvas, orient="vertical", command=self.canvas.yview)

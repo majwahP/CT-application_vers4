@@ -19,8 +19,9 @@ def calculatePos(root_window,new_window):
 def wiki_view():
     new_window = Wiki(app)
     new_window.transient(app)   
-    new_x, new_y = calculatePos(app,new_window)
-    new_window.geometry("+{}+{}".format(new_x, new_y))
+    #new_x, new_y = calculatePos(app,new_window)
+    #new_window.geometry("+{}+{}".format(new_x, new_y))
+    new_window.geometry("1080x720")
     new_window.wait_window()
     
 
@@ -44,7 +45,7 @@ def exercise_view():
 
 #Buttons
 
-button_color = '#87CEFA' 
+button_color = '#6CA6CD' 
 button_text_color = 'white' 
 button_font = ('Helvetica',30,'bold')
 
