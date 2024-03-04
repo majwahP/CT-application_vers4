@@ -21,7 +21,7 @@ def wiki_view():
     new_window.transient(app)   
     #new_x, new_y = calculatePos(app,new_window)
     #new_window.geometry("+{}+{}".format(new_x, new_y))
-    new_window.geometry("1080x720")
+    new_window.geometry("1080x720-100-40")
     new_window.wait_window()
     
 

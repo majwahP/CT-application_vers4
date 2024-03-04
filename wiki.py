@@ -9,6 +9,7 @@ import tkinter as tk
 
 button_color = '#6CA6CD' 
 button_text_color = 'white'
+button_font = ('Helvetica',10,'bold')
 
 class Wiki(Toplevel):
     
@@ -45,7 +46,7 @@ class Wiki(Toplevel):
 
     
     def createExitButton(self):
-        self.exit_button = Button(self.content_frame,bg=button_color,fg=button_text_color, height=2,width=5, text="\u2190", font=("Arial", 12), command=self.close_window)
+        self.exit_button = Button(self.content_frame,bg="#444444",fg=button_text_color, height=2,width=5, text="\u2190", font=("Arial", 12), command=self.close_window)
         self.exit_button.pack(side="left",anchor="nw", padx=5, pady=5) 
         
     def createScrollFrame(self):
@@ -64,7 +65,7 @@ class Wiki(Toplevel):
         
         self.buttons = []
         for i in range (4):
-            button = Button(master=self.topic_button_frame,width=25,bg=button_color,fg=button_text_color, text=f"Button {i+1}",command=lambda i=i+1: self.showInfo(i))
+            button = Button(master=self.topic_button_frame,width=25,bg=button_color,fg=button_text_color,font=button_font, text=f"Button {i+1}",command=lambda i=i+1: self.showInfo(i))
             button.pack(fill="x")
             self.buttons.append(button)
         
@@ -108,7 +109,7 @@ class Wiki(Toplevel):
         self.image_frame = tk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window=self.image_frame, anchor="nw")
         
-        image_width = 730   
+        image_width = 775   
         image_height = 850  
 
         img_offset = 0 

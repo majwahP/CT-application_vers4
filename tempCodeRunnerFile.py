@@ -1,1 +1,1 @@
-#6CA6CD
+button_font = ('Helvetica',30,'bold')
