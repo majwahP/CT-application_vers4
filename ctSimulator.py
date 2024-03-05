@@ -69,18 +69,20 @@ class CTsimulator(Toplevel):
 
         #Frame to but content related to the tube settings
         self.tubeSettingsFrame = Frame(master=self.content_frame)   #
-        self.tubeSettingsFrame.pack()
-        self.tubeSettingsFrame.place(relx=0.03, rely=0.07,relheight= 0.99,relwidth= 0.3, anchor = "nw")
+        #self.tubeSettingsFrame.pack()
+        self.tubeSettingsFrame.place(relx=0.03, rely=0.06, relheight= 0.99,relwidth= 0.3, anchor = "nw")
+
 
         #settings related to x-ray tube (in the order they appear in the frame)
         #title
-        self.tubeTitle = Label(master=self.tubeSettingsFrame,text="Tube Settings", font=("Helvetica", 16))
-        self.tubeTitle.pack(padx= 60, side=TOP, anchor="nw")
+        self.tubeTitle = Label(master=self.tubeSettingsFrame,text="Tube Settings", font=("Helvetica", 14))
+        self.tubeTitle.place(relx=0.3, rely=0,relheight= 0.05,relwidth= 0.3, anchor = "nw")
 
         #choose anode material
-        self.anodeFrame = Frame(master=self.tubeSettingsFrame, height=50)
-        self.anodeFrame.pack(padx=10, side=TOP, anchor="nw")
+        self.anodeFrame = Frame(master=self.tubeSettingsFrame)
+        self.anodeFrame.place(relx=0.02, rely=0.05, relheight= 0.04,relwidth= 0.4, anchor = "nw")
         self.labelanode = Label(master=self.anodeFrame,text="Anode material")
+        self.labelanode.place(relx=0.6, rely=0,relheight= 0.99,relwidth= 0.3, anchor = "nw")
         self.labelanode.pack(side=LEFT)
 
         anode_material_options = [ 
@@ -95,86 +97,97 @@ class CTsimulator(Toplevel):
         
         #choose tube current
         self.currentFrame = Frame(master=self.tubeSettingsFrame, height=50)
-        self.currentFrame.pack(padx= 10, side=TOP, anchor="nw")
+        self.currentFrame.place(relx=0, rely=0.09,relheight= 0.04,relwidth= 0.4, anchor = "nw")
         self.labelmA = Label(master=self.currentFrame,text="Current [mA]")
-        self.labelmA.pack(side=LEFT)
+        self.labelmA.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
         self.mAinput = Entry(master=self.currentFrame)
         self.mAinput.insert(0, "100")
         self.mAinput.config(fg='gray')
-        self.mAinput.pack(side=LEFT,pady=10)
+        self.mAinput.place(relx=0.5, rely=0.03,relheight= 0.7,relwidth= 0.8, anchor = "nw")
+
+        #self.mAinput.pack(side=LEFT,pady=10)
 
         #Choose tube voltage
-        self.voltageFrame = Frame(master=self.tubeSettingsFrame, height=50)
-        self.voltageFrame.pack(padx=10, side=TOP, anchor="nw")
-        self.labelkV = Label(master=self.voltageFrame,text="Enter a voltage between 20 and 300 kV.")
-        self.labelkV.pack(side=LEFT)
+        self.voltageFrame = Frame(master=self.tubeSettingsFrame)
+        self.voltageFrame.place(relx=0, rely=0.13,relheight= 0.04,relwidth= 0.42, anchor = "nw")
+        self.labelkV = Label(master=self.voltageFrame, text="Voltage (20 to 300 kV)")
+        self.labelkV.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.7, anchor = "nw")
         self.kVinput = Entry(master=self.voltageFrame)
         self.kVinput.insert(0, "120")
         self.kVinput.config(fg='gray')
-        self.kVinput.pack(side=LEFT, pady=5)
+        self.kVinput.place(relx=0.7, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
 
+        
         #filter material
         self.filterFrame = Frame(master=self.tubeSettingsFrame, height=50)
-        self.filterFrame.pack(padx=10, side=TOP, anchor="nw")
+        self.filterFrame.place(relx=0.02, rely=0.17,relheight= 0.04,relwidth= 0.9, anchor = "nw")
         self.labelfilter_mat = Label(master=self.filterFrame,text="Material of tube filter:")
+        self.labelfilter_mat.place(relx=0.6, rely=0.1,relheight= 0.1,relwidth= 0.7, anchor = "nw")
         self.labelfilter_mat.pack(side=LEFT)
 
         filter_material_options = [ 
-            "Aleminium",
+            "Aluminium",
             "Copper",
             "Tin",
             "Gadolinium"
         ]
         self.selected_option_filter_material = StringVar()
-        self.selected_option_filter_material.set("Aleminium")
+        self.selected_option_filter_material.set("Aluminium")
         option_drop_menu_filter_material = OptionMenu(self.filterFrame, self.selected_option_filter_material, *filter_material_options)
         option_drop_menu_filter_material.pack(side=LEFT)
 
         #thickness of filter
         self.thicknessFrame = Frame(master=self.tubeSettingsFrame, height=50)
-        self.thicknessFrame.pack(padx=10, side=TOP, anchor="nw")
+        self.thicknessFrame.place(relx=0.02, rely=0.21,relheight= 0.04,relwidth= 0.5, anchor = "nw")
         self.labelthickness = Label(master=self.thicknessFrame,text="Thickness filter [mm]")
-        self.labelthickness.pack(side=LEFT)
+        self.labelthickness.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
         self.thicknessinput = Entry(master=self.thicknessFrame)
         self.thicknessinput.insert(0, "1")
         self.thicknessinput.config(fg='gray')
-        self.thicknessinput.pack(side=LEFT, pady=5)
+        self.thicknessinput.place(relx=0.5, rely=0,relheight= 0.7,relwidth= 0.5, anchor = "nw")
 
         #Choose angle of anode
         self.anode_angle_Frame = Frame(master=self.tubeSettingsFrame, height=50)
-        self.anode_angle_Frame.pack(padx=10, side=TOP, anchor="nw")
+        self.anode_angle_Frame.place(relx=0.01, rely=0.25,relheight= 0.04,relwidth= 0.5, anchor = "nw")
         self.label_anode_angle = Label(master=self.anode_angle_Frame,text="Anode angle [Deg]")
-        self.label_anode_angle.pack(side=LEFT)
+        self.label_anode_angle.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
         self.angle_input = Entry(master=self.anode_angle_Frame)
         self.angle_input.insert(0, "15")
         self.angle_input.config(fg='gray')
-        self.angle_input.pack(side=LEFT, pady=5)
+        self.angle_input.place(relx=0.5, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
 
         #button that generates a new spectra when pressed
-        self.add_plot_button = Button(self.tubeSettingsFrame, text="Update Spectra", command=self.update_spectra)
-        self.add_plot_button.pack(pady=1)
+        self.add_plot_button = Button(master=self.tubeSettingsFrame, text="Update Spectra", command=self.update_spectra)
+        self.add_plot_button.place(relx=0.3, rely=0.29, relwidth=0.3, relheight=0.04, anchor="nw")
 
+        
         #Frame to place image of the spectra
-        self.spectra_frame = Frame(self.tubeSettingsFrame, width=500, height=400)
-        self.spectra_frame.pack(pady=5)
-        self.spectra_frame.bind('<Configure>', self.on_resize)
+        self.spectra_frame = Frame(self.tubeSettingsFrame)
+        #self.add_plot_button.pack(pady=1)
+        self.spectra_frame.place(relx=0, rely=0.33,relheight= 0.5,relwidth= 0.9, anchor = "nw")
+        #self.spectra_frame.pack(pady=5)
 
 
 
         #simulation settings
-        self.simulatorTitle = Label(master=self.tubeSettingsFrame,text="Simulator Settings:", font=("Helvetica", 16))
-        self.simulatorTitle.pack(padx= 60, side=TOP, anchor="nw")
+        self.simulatorTitle = Label(master=self.tubeSettingsFrame,text="Simulator Settings:", font=("Helvetica", 13))
+        self.simulatorTitle.place(relx=0, rely=0.83,relheight= 0.05,relwidth= 0.4, anchor = "nw")
+        #self.simulatorTitle.pack(padx= 60, side=TOP, anchor="nw")
 
         #Choose the total rotation of scan
-        self.total_rot_Frame = Frame(master=self.tubeSettingsFrame, height=50)
-        self.total_rot_Frame.bind('<Configure>', self.on_resize)
-        self.total_rot_Frame.pack(padx=10, side=TOP, anchor="nw")
+        self.total_rot_Frame = Frame(master=self.tubeSettingsFrame)
+        self.total_rot_Frame.place(relx=0, rely=0.88,relheight= 0.05,relwidth= 0.4, anchor = "nw")
+        #self.total_rot_Frame.pack(padx=10, side=TOP, anchor="nw")
         self.label_tot_rot = Label(master=self.total_rot_Frame,text="Total rotation angle [Deg]")
-        self.label_tot_rot.pack(side=LEFT)
+        self.label_tot_rot.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.4, anchor = "nw")
+
+        #self.label_tot_rot.pack(side=LEFT)
         self.tot_rot_input = Entry(master=self.total_rot_Frame)
         self.tot_rot_input.insert(0, "180")
         self.tot_rot_input.config(fg='gray')
         self.tot_rot_input.pack(side=LEFT, pady=5)
+        self.tot_rot_input.place(relx=0.4, rely=0.03,relheight= 0.7, relwidth= 0.4, anchor = "nw")
+
 
           
     def update_voltage_message(self):
@@ -197,7 +210,7 @@ class CTsimulator(Toplevel):
         anode_material = self.selected_option_anode_material.get()
         thickness = int(self.thicknessinput.get())
         angle = int(self.angle_input.get())
-        if self.selected_option_filter_material.get() == "Aleminium":
+        if self.selected_option_filter_material.get() == "Aluminium":
             filter_material = 'Al'
         elif self.selected_option_filter_material.get() == "Copper":
            filter_material = 'Cu' 
