@@ -55,11 +55,11 @@ class CTsimulator(Toplevel):
         self.shape_dimensions_frame.place(relx = 0.4, rely = 0.17, relwidth=0.45, relheight=0.04, anchor="nw")
         #add options of how simulation should be peformed
         self.noSimulationChecked= BooleanVar()
-        self.noSimulation = Checkbutton(master=self.content_frame, variable=self.noSimulationChecked, text="No simulation", command=self.on_checkbox_clicked)
+        self.noSimulation = Checkbutton(master=self.content_frame, variable=self.noSimulationChecked, text="No animation", command=self.on_checkbox_clicked)
         self.noSimulation.place(relx=0.745, rely=0.84, relwidth=0.08, relheight=0.04, anchor="nw")  
-        self.simulation_speed_fast_btn = Button(master=self.content_frame, text="Fast simulation", command=self.toggle_color, bg='gray')
+        self.simulation_speed_fast_btn = Button(master=self.content_frame, text="Fast animation", command=self.toggle_color, bg='gray')
         self.simulation_speed_fast_btn.place(relx=0.82, rely=0.84, relwidth=0.065, relheight=0.04, anchor="nw")
-        self.simulation_speed_slow_btn = Button(master=self.content_frame, text="Slow simulation", command=self.toggle_color, bg='green')
+        self.simulation_speed_slow_btn = Button(master=self.content_frame, text="Slow animation", command=self.toggle_color, bg='green')
         self.simulation_speed_slow_btn.place(relx=0.885, rely=0.84, relwidth=0.065, relheight=0.04, anchor="nw")
 
         
