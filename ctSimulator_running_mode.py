@@ -56,8 +56,9 @@ class CTsimulator_running_mode(Toplevel):
         self.plotFrame.place(relx=0.1, rely=0.01,relheight= 0.95,relwidth= 0.4, anchor = "nw")
 
     def perform_CT(self):
-        reco_space = odl.uniform_discr(min_pt=[-20, -20], max_pt=[20, 20], shape=[len(self.attenuation_cof), len(self.attenuation_cof[0])], dtype='float32')
-        angle_partition = odl.uniform_partition(0, math.radians(self.total_rot), self.total_rot)    #Custom angle
+        reco_space = odl.uniform_discr(min_pt=[-20, -20], max_pt=[20, 20], shape=[len(self.attenuation_cof),
+            len(self.attenuation_cof[0])], dtype='float32')
+        angle_partition = odl.uniform_partition(0, math.radians(self.total_rot), self.total_rot)    
         detector_partition = odl.uniform_partition(-30, 30, 512)
         geometry = odl.tomo.Parallel2dGeometry(angle_partition, detector_partition)
         ray_trafo = odl.tomo.RayTransform(reco_space, geometry, impl='astra_cpu')
