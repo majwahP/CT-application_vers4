@@ -102,7 +102,7 @@ class CTsimulator(Toplevel):
         self.labelmA.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
         self.mAinput = Entry(master=self.currentFrame)
         self.mAinput.insert(0, "100")
-        self.mAinput.config(fg='gray')
+        self.mAinput.config(fg='black')
         self.mAinput.place(relx=0.5, rely=0.03,relheight= 0.7,relwidth= 0.8, anchor = "nw")
 
         #self.mAinput.pack(side=LEFT,pady=10)
@@ -114,7 +114,7 @@ class CTsimulator(Toplevel):
         self.labelkV.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.7, anchor = "nw")
         self.kVinput = Entry(master=self.voltageFrame)
         self.kVinput.insert(0, "120")
-        self.kVinput.config(fg='gray')
+        self.kVinput.config(fg='black')
         self.kVinput.place(relx=0.7, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
 
         
@@ -143,7 +143,7 @@ class CTsimulator(Toplevel):
         self.labelthickness.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
         self.thicknessinput = Entry(master=self.thicknessFrame)
         self.thicknessinput.insert(0, "1")
-        self.thicknessinput.config(fg='gray')
+        self.thicknessinput.config(fg='black')
         self.thicknessinput.place(relx=0.5, rely=0,relheight= 0.7,relwidth= 0.5, anchor = "nw")
 
         #Choose angle of anode
@@ -153,7 +153,7 @@ class CTsimulator(Toplevel):
         self.label_anode_angle.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
         self.angle_input = Entry(master=self.anode_angle_Frame)
         self.angle_input.insert(0, "15")
-        self.angle_input.config(fg='gray')
+        self.angle_input.config(fg='black')
         self.angle_input.place(relx=0.5, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
 
         #button that generates a new spectra when pressed
@@ -184,7 +184,7 @@ class CTsimulator(Toplevel):
         #self.label_tot_rot.pack(side=LEFT)
         self.tot_rot_input = Entry(master=self.total_rot_Frame)
         self.tot_rot_input.insert(0, "180")
-        self.tot_rot_input.config(fg='gray')
+        self.tot_rot_input.config(fg='black')
         self.tot_rot_input.pack(side=LEFT, pady=5)
         self.tot_rot_input.place(relx=0.4, rely=0.03,relheight= 0.7, relwidth= 0.4, anchor = "nw")
 

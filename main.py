@@ -51,7 +51,7 @@ button_font = ('Helvetica',30,'bold')
 
 btnInfo = Button(master = app, text = "Wiki", command=wiki_view,bg=button_color,fg=button_text_color,font=button_font)
 btnSimulation = Button(master=app, text="Simulation", command=simulator_view,bg=button_color,fg=button_text_color,font=button_font) #Changed this to exercise view will fixing from CTK to TK
-btnExercises = Button(master=app, text="Exercises", command=exercise_view,bg=button_color,fg=button_text_color,font=button_font)
+btnExercises = Button(master=app, text="Exercises",bg=button_color,fg=button_text_color,font=button_font)
 btnExtra = Button(master=app, text="Extra",bg=button_color,fg=button_text_color,font=button_font)
 
 
