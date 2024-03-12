@@ -389,12 +389,17 @@ class CTsimulator(Toplevel):
         dimentions_options = [1, 2, 3, 4, 5]
 
         if self.selected_option_shape.get() == "rectangle":
-
+                        
             for widget in self.shape_dimensions_frame.winfo_children():
                 widget.destroy()
+                
 
             self.selected_rectangle_width = StringVar()
             self.selected_rectangle_width.set("Width")
+            #if self.selected_rectangle_width.get() != "Width":
+             #   Width = int(self.selected_option_scale.get())
+            #else:
+             #   Width=2
             self.option_drop_rectangle_width = OptionMenu(self.shape_dimensions_frame, self.selected_rectangle_width, * dimentions_options)
             self.option_drop_rectangle_width.pack(side=LEFT)
 
@@ -402,6 +407,7 @@ class CTsimulator(Toplevel):
             self.selected_rectangle_height.set("Height")
             self.option_drop_rectangle_height = OptionMenu(self.shape_dimensions_frame, self.selected_rectangle_height, * dimentions_options)
             self.option_drop_rectangle_height.pack(side=LEFT)
+
         
         elif self.selected_option_shape.get() == "45 deg line":
 
@@ -449,8 +455,7 @@ class CTsimulator(Toplevel):
             self.option_drop_oval_height = OptionMenu(self.shape_dimensions_frame, self.selected_oval_height, * dimentions_options)
             self.option_drop_oval_height.pack(side=LEFT)
                 
-        
-    
+
     def addObject(self):
         #find chosen characteristics
         if self.selected_option_shape.get() == "Shape":
@@ -468,24 +473,48 @@ class CTsimulator(Toplevel):
 
         #Create the object   
         if shape == "rectangle":
-            rec_width = int(self.selected_rectangle_width.get()) * 50
-            rec_height = int(self.selected_rectangle_height.get()) * 50
+            if self.selected_rectangle_width.get() != "Width":
+                rec_width = int(self.selected_option_scale.get() *50)
+            else:
+                rec_width=2*50
+            if self.selected_rectangle_height.get() != "Height":
+                rec_height = int(self.selected_option_scale.get() *50)
+            else:
+                rec_height=2*50
+            #rec_width = int(self.selected_rectangle_width.get()) * 50
+            #rec_height = int(self.selected_rectangle_height.get()) * 50
             object_id = self.dragNdropCanvas.create_rectangle(100, 100, 100 + rec_width, 100 + rec_height, fill=self.get_material_color(material))
 
         if shape == "45 deg line":
-            deg_length = int(self.selected_option_deg_height.get()) * 50
+            if self.selected_option_deg_height.get() != "Length":
+                deg_length = int(self.selected_option_scale.get() *50)
+            else:
+                deg_length=2*50
             object_id = self.dragNdropCanvas.create_line(100, 100, 100 + deg_length, 100 + deg_length, width=5, fill=self.get_material_color(material))
         
         if shape == "vertical line":
-            ver_length = int(self.selected_option_line_height.get()) *50
+            if self.selected_option_line_height.get() != "Length":
+                ver_length = int(self.selected_option_scale.get() *50)
+            else:
+                ver_length=2*50
             object_id = self.dragNdropCanvas.create_line(100, 100, 100, 100 + ver_length, width=5, fill=self.get_material_color(material))
 
         if shape == "horizontal line":
-            horiz_length = int (self.selected_option_line_width.get()) * 50
+            if self.selected_option_line_width.get() != "Length":
+                horiz_length = int(self.selected_option_scale.get() *50)
+            else:
+                horiz_length=2*50
             object_id = self.dragNdropCanvas.create_line(100, 100, 100 + horiz_length, 100, width=5, fill=self.get_material_color(material))
+        
         if shape == "oval":
-            oval_width = int(self.selected_oval_width.get()) * 50
-            oval_height = int(self.selected_oval_height.get()) * 50
+            if self.selected_oval_width.get() != "Width":
+                oval_width = int(self.selected_option_scale.get() *50)
+            else:
+                oval_width=2*50
+            if self.selected_oval_height.get() != "Height":
+                oval_height = int(self.selected_option_scale.get() *50)
+            else:
+                oval_height=2*50
             object_id = self.dragNdropCanvas.create_oval(100, 100, 100 + oval_width, 100 + oval_height, fill=self.get_material_color(material))
 
         #bind action functions to the object
