@@ -176,7 +176,7 @@ class CTsimulator(Toplevel):
 
         #Choose the total rotation of scan
         self.total_rot_Frame = Frame(master=self.tubeSettingsFrame)
-        self.total_rot_Frame.place(relx=0, rely=0.88,relheight= 0.05,relwidth= 0.4, anchor = "nw")
+        self.total_rot_Frame.place(relx=0, rely=0.88,relheight= 0.05,relwidth= 0.9, anchor = "nw")
         #self.total_rot_Frame.pack(padx=10, side=TOP, anchor="nw")
         self.label_tot_rot = Label(master=self.total_rot_Frame,text="Total rotation angle [Deg]")
         self.label_tot_rot.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.4, anchor = "nw")
@@ -192,14 +192,14 @@ class CTsimulator(Toplevel):
           
     def update_voltage_message(self):
         if self.selected_option_anode_material.get() == "Rhodium" or self.selected_option_anode_material.get() == "Molybdenum":
-            self.labelkV.config(text="Enter a voltage between 20 and 50 kV")
+            self.labelkV.config(text="Voltage (20 to 50 kV)")
             self.kVinput.delete(0, END)  
             self.kVinput.insert(0, "30") 
         elif self.selected_option_anode_material.get() == "Molybdenum":
-            self.labelkV.config(text="Enter a voltage between 20 and 50 kV")
+            self.labelkV.config(text="Voltage (20 to 50 kV)")
             self.kVinput.insert(0, "30")
         else:
-            self.labelkV.config(text="Enter a voltage in the interval 20 to 300 kV")
+            self.labelkV.config(text="Voltage (20 to 300 kV)")
 
 
     #Spectra functions
