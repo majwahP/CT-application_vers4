@@ -369,11 +369,11 @@ class CTsimulator(Toplevel):
         option_drop_menu_material.config(height=17)
 
         #scaling options dropdown
-        self.selected_option_scale = StringVar()
-        self.selected_option_scale.set("Scale")
-        option_drop_menu_scale = OptionMenu(self.dropDown_frame, self.selected_option_scale, *scale_options)
-        option_drop_menu_scale.pack(side=LEFT)
-        option_drop_menu_scale.config(height=17)
+        #self.selected_option_scale = StringVar()
+        #self.selected_option_scale.set("Scale")
+        #option_drop_menu_scale = OptionMenu(self.dropDown_frame, self.selected_option_scale, *scale_options)
+        #option_drop_menu_scale.pack(side=LEFT)
+        #option_drop_menu_scale.config(height=17)
         
         #button to att the object with chosen characteristics
         self.addObject_button = Button(master=self.dropDown_frame, text="Add Object", bg = "green", command=self.addObject)
@@ -466,53 +466,59 @@ class CTsimulator(Toplevel):
             material = "tissue"
         else:
             material = self.selected_option_material.get()
-        if self.selected_option_scale.get() != "Scale":
-            scale = int(self.selected_option_scale.get())
-        else:
-            scale=1
+        #if self.selected_option_scale.get() != "Scale":
+        #    scale = int(self.selected_option_scale.get())
+        #else:
+        #    scale=1
 
         #Create the object   
         if shape == "rectangle":
-            if self.selected_rectangle_width.get() != "Width":
-                rec_width = int(self.selected_option_scale.get() *50)
-            else:
-                rec_width=2*50
-            if self.selected_rectangle_height.get() != "Height":
-                rec_height = int(self.selected_option_scale.get() *50)
-            else:
-                rec_height=2*50
+            if 'selected_rectangle_width' in locals() or 'selected_rectangle_width' in globals():
+
+                if self.selected_rectangle_width.get() != "Width":
+                    rec_width = 50 * int(self.selected_rectangle_width.get())
+                    print(rec_width)
+                else:
+                    rec_width=2*50
+                if self.selected_rectangle_height.get() != "Height":
+                    rec_height = 50*int(self.selected_rectangle_height.get())
+                else:
+                    rec_height=2*50
             #rec_width = int(self.selected_rectangle_width.get()) * 50
             #rec_height = int(self.selected_rectangle_height.get()) * 50
-            object_id = self.dragNdropCanvas.create_rectangle(100, 100, 100 + rec_width, 100 + rec_height, fill=self.get_material_color(material))
+                object_id = self.dragNdropCanvas.create_rectangle(100, 100, 100 + rec_width, 100 + rec_height, fill=self.get_material_color(material))
+            else:
+                object_id = self.dragNdropCanvas.create_rectangle(100, 100, 100 + 50, 100 + 50, fill=self.get_material_color(material))
 
         if shape == "45 deg line":
             if self.selected_option_deg_height.get() != "Length":
-                deg_length = int(self.selected_option_scale.get() *50)
+                deg_length = 50*(self.selected_option_deg_height.get())
             else:
                 deg_length=2*50
+            print(deg_length)
             object_id = self.dragNdropCanvas.create_line(100, 100, 100 + deg_length, 100 + deg_length, width=5, fill=self.get_material_color(material))
         
         if shape == "vertical line":
             if self.selected_option_line_height.get() != "Length":
-                ver_length = int(self.selected_option_scale.get() *50)
+                ver_length = 50* int(self.selected_option_line_height.get())
             else:
                 ver_length=2*50
             object_id = self.dragNdropCanvas.create_line(100, 100, 100, 100 + ver_length, width=5, fill=self.get_material_color(material))
 
         if shape == "horizontal line":
             if self.selected_option_line_width.get() != "Length":
-                horiz_length = int(self.selected_option_scale.get() *50)
+                horiz_length = 50*int(self.selected_option_line_width.get())
             else:
                 horiz_length=2*50
             object_id = self.dragNdropCanvas.create_line(100, 100, 100 + horiz_length, 100, width=5, fill=self.get_material_color(material))
         
         if shape == "oval":
             if self.selected_oval_width.get() != "Width":
-                oval_width = int(self.selected_option_scale.get() *50)
+                oval_width = 50*int(self.selected_oval_width.get())
             else:
                 oval_width=2*50
             if self.selected_oval_height.get() != "Height":
-                oval_height = int(self.selected_option_scale.get() *50)
+                oval_height = 50*int(self.selected_oval_height.get())
             else:
                 oval_height=2*50
             object_id = self.dragNdropCanvas.create_oval(100, 100, 100 + oval_width, 100 + oval_height, fill=self.get_material_color(material))
