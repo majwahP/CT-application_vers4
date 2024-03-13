@@ -101,7 +101,7 @@ class CTsimulator(Toplevel):
         self.labelmA = Label(master=self.currentFrame,text="Current [mA]")
         self.labelmA.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
         self.mAinput = Entry(master=self.currentFrame)
-        self.mAinput.insert(0, "100")
+        self.mAinput.insert(0, "1")
         self.mAinput.config(fg='black')
         self.mAinput.place(relx=0.5, rely=0.03,relheight= 0.7,relwidth= 0.8, anchor = "nw")
 
@@ -207,6 +207,7 @@ class CTsimulator(Toplevel):
     
         #get user input
         kV = int(self.kVinput.get())
+        mA = int(self.mAinput.get())
         anode_material = self.selected_option_anode_material.get()
         thickness = int(self.thicknessinput.get())
         angle = int(self.angle_input.get())
@@ -226,7 +227,7 @@ class CTsimulator(Toplevel):
             anode_material = 'Mo'
 
         #generate the spectra
-        self.spectra = sp.Spek(kvp=kV,th=angle,mu_data_source='nist', targ=anode_material)
+        self.spectra = sp.Spek(kvp=kV,th=angle,mu_data_source='nist', targ=anode_material, mas=mA)
         self.spectra.filter(filter_material,thickness)
         
         
