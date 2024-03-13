@@ -51,9 +51,11 @@ class CTsimulator_running_mode(Toplevel):
 
     def init_content_frames(self):    
         self.imageFrame = Frame(master=self)
-        self.imageFrame.place(relx=0.5, rely=0.01,relheight= 0.95,relwidth= 0.4, anchor = "nw")
+        self.imageFrame.place(relx=0.35, rely=0.01,relheight= 0.95,relwidth= 0.3, anchor = "nw")
+        self.imageFrame2 = Frame(master=self)
+        self.imageFrame2.place(relx=0.7, rely=0.01,relheight= 0.95,relwidth= 0.29, anchor = "nw")
         self.plotFrame = Frame(master=self)
-        self.plotFrame.place(relx=0.1, rely=0.01,relheight= 0.95,relwidth= 0.4, anchor = "nw")
+        self.plotFrame.place(relx=0.1, rely=0.01,relheight= 0.95,relwidth= 0.3, anchor = "nw")
 
     def perform_CT(self):
         reco_space = odl.uniform_discr(min_pt=[-20, -20], max_pt=[20, 20], shape=[len(self.attenuation_cof),
@@ -79,9 +81,9 @@ class CTsimulator_running_mode(Toplevel):
         self.sinotext.pack()
         self.sinogramimage = Label(master=self.imageFrame, image=self.sino_image, width=300)
         self.sinogramimage.pack()
-        self.recotext = Label(master=self.imageFrame, text="Reconstructed image::")
+        self.recotext = Label(master=self.imageFrame2, text="Reconstructed image::")
         self.recotext.pack()
-        self.reconstructedimage = Label(master=self.imageFrame, width=300, height=300)
+        self.reconstructedimage = Label(master=self.imageFrame2, width=300, height=300)
         self.reconstructedimage.pack()
 
 
