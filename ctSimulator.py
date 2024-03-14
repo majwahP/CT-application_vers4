@@ -170,7 +170,7 @@ class CTsimulator(Toplevel):
 
 
         #simulation settings
-        self.simulatorTitle = Label(master=self.tubeSettingsFrame,text="Simulator Settings:", font=("Helvetica", 13))
+        self.simulatorTitle = Label(master=self.tubeSettingsFrame)
         self.simulatorTitle.place(relx=0, rely=0.83,relheight= 0.05,relwidth= 0.4, anchor = "nw")
         #self.simulatorTitle.pack(padx= 60, side=TOP, anchor="nw")
 
