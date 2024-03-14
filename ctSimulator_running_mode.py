@@ -134,6 +134,9 @@ class CTsimulator_running_mode(Toplevel):
         sinogram_intensity = self.proj_data.asarray()
         fig = Figure(figsize=(5, 4), dpi=100)
         plot = fig.add_subplot(1, 1, 1)
+        plot.set_title('Measured intensity')
+        plot.set_xlabel('Pixel')
+        plot.set_ylabel('Intensity')
 
         if hasattr(self, 'plot_canvas'):
             self.plot_canvas.get_tk_widget().destroy()

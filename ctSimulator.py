@@ -101,7 +101,7 @@ class CTsimulator(Toplevel):
         self.labelmA = Label(master=self.currentFrame,text="Current [mA]")
         self.labelmA.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.5, anchor = "nw")
         self.mAinput = Entry(master=self.currentFrame)
-        self.mAinput.insert(0, "100")
+        self.mAinput.insert(0, "1")
         self.mAinput.config(fg='black')
         self.mAinput.place(relx=0.5, rely=0.03,relheight= 0.7,relwidth= 0.8, anchor = "nw")
 
@@ -176,7 +176,7 @@ class CTsimulator(Toplevel):
 
         #Choose the total rotation of scan
         self.total_rot_Frame = Frame(master=self.tubeSettingsFrame)
-        self.total_rot_Frame.place(relx=0, rely=0.88,relheight= 0.05,relwidth= 0.4, anchor = "nw")
+        self.total_rot_Frame.place(relx=0, rely=0.88,relheight= 0.05,relwidth= 0.9, anchor = "nw")
         #self.total_rot_Frame.pack(padx=10, side=TOP, anchor="nw")
         self.label_tot_rot = Label(master=self.total_rot_Frame,text="Total rotation angle [Deg]")
         self.label_tot_rot.place(relx=0, rely=0.03,relheight= 0.7,relwidth= 0.4, anchor = "nw")
@@ -192,14 +192,14 @@ class CTsimulator(Toplevel):
           
     def update_voltage_message(self):
         if self.selected_option_anode_material.get() == "Rhodium" or self.selected_option_anode_material.get() == "Molybdenum":
-            self.labelkV.config(text="Enter a voltage between 20 and 50 kV")
+            self.labelkV.config(text="Voltage (20 to 50 kV)")
             self.kVinput.delete(0, END)  
             self.kVinput.insert(0, "30") 
         elif self.selected_option_anode_material.get() == "Molybdenum":
-            self.labelkV.config(text="Enter a voltage between 20 and 50 kV")
+            self.labelkV.config(text="Voltage (20 to 50 kV)")
             self.kVinput.insert(0, "30")
         else:
-            self.labelkV.config(text="Enter a voltage in the interval 20 to 300 kV")
+            self.labelkV.config(text="Voltage (20 to 300 kV)")
 
 
     #Spectra functions
@@ -207,6 +207,7 @@ class CTsimulator(Toplevel):
     
         #get user input
         kV = int(self.kVinput.get())
+        mA = int(self.mAinput.get())
         anode_material = self.selected_option_anode_material.get()
         thickness = int(self.thicknessinput.get())
         angle = int(self.angle_input.get())
@@ -226,7 +227,7 @@ class CTsimulator(Toplevel):
             anode_material = 'Mo'
 
         #generate the spectra
-        self.spectra = sp.Spek(kvp=kV,th=angle,mu_data_source='nist', targ=anode_material)
+        self.spectra = sp.Spek(kvp=kV,th=angle,mu_data_source='nist', targ=anode_material, mas=mA)
         self.spectra.filter(filter_material,thickness)
         
         
@@ -473,17 +474,16 @@ class CTsimulator(Toplevel):
 
         #Create the object   
         if shape == "rectangle":
-            if 'selected_rectangle_width' in locals() or 'selected_rectangle_width' in globals():
-
+            if hasattr(self, 'selected_rectangle_width'):
                 if self.selected_rectangle_width.get() != "Width":
                     rec_width = 50 * int(self.selected_rectangle_width.get())
-                    print(rec_width)
                 else:
                     rec_width=2*50
-                if self.selected_rectangle_height.get() != "Height":
-                    rec_height = 50*int(self.selected_rectangle_height.get())
-                else:
-                    rec_height=2*50
+                if hasattr(self, 'selected_rectangle_height'):    
+                    if self.selected_rectangle_height.get() != "Height":
+                        rec_height = 50*int(self.selected_rectangle_height.get())
+                    else:
+                        rec_height=2*50
             #rec_width = int(self.selected_rectangle_width.get()) * 50
             #rec_height = int(self.selected_rectangle_height.get()) * 50
                 object_id = self.dragNdropCanvas.create_rectangle(100, 100, 100 + rec_width, 100 + rec_height, fill=self.get_material_color(material))
@@ -492,10 +492,9 @@ class CTsimulator(Toplevel):
 
         if shape == "45 deg line":
             if self.selected_option_deg_height.get() != "Length":
-                deg_length = 50*(self.selected_option_deg_height.get())
+                deg_length = 50*int(self.selected_option_deg_height.get())
             else:
                 deg_length=2*50
-            print(deg_length)
             object_id = self.dragNdropCanvas.create_line(100, 100, 100 + deg_length, 100 + deg_length, width=5, fill=self.get_material_color(material))
         
         if shape == "vertical line":
@@ -653,8 +652,8 @@ class CTsimulator(Toplevel):
             self.simulation_speed_fast_btn.place_forget()
             self.simulation_speed_slow_btn.place_forget()
         else:
-            self.simulation_speed_fast_btn.place(relx=0.77, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
-            self.simulation_speed_slow_btn.place(relx=0.87, rely=0.8, relwidth=0.1, relheight=0.05, anchor="nw")
+            self.simulation_speed_fast_btn.place(relx=0.82, rely=0.84, relwidth=0.065, relheight=0.04, anchor="nw")
+            self.simulation_speed_slow_btn.place(relx=0.885, rely=0.84, relwidth=0.065, relheight=0.04, anchor="nw")
 
     def closeWindow(self):
         self.master.state('zoomed')
