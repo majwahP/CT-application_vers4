@@ -170,7 +170,7 @@ class CTsimulator(Toplevel):
 
 
         #simulation settings
-        self.simulatorTitle = Label(master=self.tubeSettingsFrame,text="Simulator Settings:", font=("Helvetica", 13))
+        self.simulatorTitle = Label(master=self.tubeSettingsFrame)
         self.simulatorTitle.place(relx=0, rely=0.83,relheight= 0.05,relwidth= 0.4, anchor = "nw")
         #self.simulatorTitle.pack(padx= 60, side=TOP, anchor="nw")
 
@@ -569,7 +569,7 @@ class CTsimulator(Toplevel):
                 fast_simulation = False    
         if not rot_deg:
             rot_deg=180
-        self.new_window = CTsimulator_running_mode(attenuation, mA, kV, int(rot_deg), fast_simulation, no_simulation)
+        self.new_window = CTsimulator_running_mode(attenuation, mA, int(rot_deg), fast_simulation, no_simulation)
         self.new_window.wait_window()
         
        

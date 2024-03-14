@@ -9,7 +9,7 @@ import math
 import time
 
 class CTsimulator_running_mode(Toplevel):
-    def __init__(self, attenuation_cof, mA, kV, total_rotation, fast_simulation, no_simulation):
+    def __init__(self, attenuation_cof, mA, total_rotation, fast_simulation, no_simulation):
         super().__init__()
         
         self.init_window()
@@ -18,7 +18,6 @@ class CTsimulator_running_mode(Toplevel):
         #init variables
         self.attenuation_cof = attenuation_cof
         self.mA = mA
-        self.kV = kV
         self.total_rot = total_rotation
         if no_simulation:
             self.no_simulation = TRUE
