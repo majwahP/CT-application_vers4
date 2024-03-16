@@ -147,4 +147,3 @@ class CTsimulator_running_mode(Toplevel):
         self.plot_canvas.draw()
         self.plot_canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1) 
 
- 
