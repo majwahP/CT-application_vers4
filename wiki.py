@@ -2,7 +2,11 @@ from tkinter import *
 from topic import Topic
 from Xray_Tube import Xray_Tube
 from sinogram import Sinogram
-from ct_scanning import CT_scanning
+from About_CT import About_CT
+from Detector import Detector
+from interaction_w_materia import Interaction_w_materia
+from Dose import Dose
+
 from reconstruction import Reconstruction
 from PIL import Image, ImageTk
 import tkinter as tk
@@ -24,21 +28,33 @@ class Wiki(Toplevel):
         self.createScrollFrame()    
         self.initRightSide()    
         
+        ct = About_CT()  
+        title_text1 = ct.get_title() 
+        self.buttons[0].configure(text=title_text1, command=lambda ct = ct: self.createRightSide(ct))
+
         tube = Xray_Tube()  
-        title_text = tube.get_title() 
-        self.buttons[0].configure(text=title_text, command=lambda tube=tube: self.createRightSide(tube))
+        title_text2 = tube.get_title() 
+        self.buttons[1].configure(text=title_text2, command=lambda tube=tube: self.createRightSide(tube))
+
+        detector = Detector()  
+        title_text3 = detector.get_title() 
+        self.buttons[2].configure(text=title_text3, command=lambda detector=detector: self.createRightSide(detector))
+
+        int_mat = Interaction_w_materia()  
+        title_text4 = int_mat.get_title() 
+        self.buttons[3].configure(text=title_text4, command=lambda int_mat=int_mat: self.createRightSide(int_mat))
+
+        dose = Dose()  
+        title_text5 = dose.get_title() 
+        self.buttons[4].configure(text=title_text5, command=lambda dose=dose: self.createRightSide(dose))
 
         sino = Sinogram()  
-        title_text2 = sino.get_title() 
-        self.buttons[1].configure(text=title_text2, command=lambda sino=sino: self.createRightSide(sino))
-
-        ct = CT_scanning()  
-        title_text3 = ct.get_title() 
-        self.buttons[2].configure(text=title_text3, command=lambda ct = ct: self.createRightSide(ct))
+        title_text6 = sino.get_title() 
+        self.buttons[5].configure(text=title_text6, command=lambda sino=sino: self.createRightSide(sino))
 
         rec = Reconstruction()  
-        title_text4 = rec.get_title() 
-        self.buttons[3].configure(text=title_text4, command=lambda rec=rec: self.createRightSide(rec))
+        title_text7 = rec.get_title() 
+        self.buttons[6].configure(text=title_text7, command=lambda rec=rec: self.createRightSide(rec))
     
     
     def close_window(self):
@@ -64,7 +80,7 @@ class Wiki(Toplevel):
         self.canvas_scroll.create_window((10, 0), window = self.topic_button_frame,anchor="nw")
         
         self.buttons = []
-        for i in range (4):
+        for i in range (7):
             button = Button(master=self.topic_button_frame,width=25,bg=button_color,fg=button_text_color,font=button_font, text=f"Button {i+1}",command=lambda i=i+1: self.showInfo(i))
             button.pack(fill="x")
             self.buttons.append(button)
@@ -82,7 +98,16 @@ class Wiki(Toplevel):
         
     def update_wiki(self,some_topic):
         self.canvas.delete("all")
-        if some_topic.get_title() == "X-ray Tube":
+
+        if some_topic.get_title() == "About CT":
+            self.update_textbox(some_topic)
+        elif some_topic.get_title() == "X-ray Tube":
+            self.update_textbox(some_topic)
+        elif some_topic.get_title() == "The Detector":
+            self.update_textbox(some_topic)
+        elif some_topic.get_title() == "Interaction with Materia":
+            self.update_textbox(some_topic)
+        elif some_topic.get_title() == "Dose":
             self.update_textbox(some_topic)
         elif some_topic.get_title() == "Sinogram":
             self.update_textbox(some_topic)
