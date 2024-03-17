@@ -6,8 +6,7 @@ from About_CT import About_CT
 from Detector import Detector
 from interaction_w_materia import Interaction_w_materia
 from Dose import Dose
-
-from reconstruction import Reconstruction
+from Central_slice import Central_slice
 from PIL import Image, ImageTk
 import tkinter as tk
 
@@ -52,9 +51,9 @@ class Wiki(Toplevel):
         title_text6 = sino.get_title() 
         self.buttons[5].configure(text=title_text6, command=lambda sino=sino: self.createRightSide(sino))
 
-        rec = Reconstruction()  
-        title_text7 = rec.get_title() 
-        self.buttons[6].configure(text=title_text7, command=lambda rec=rec: self.createRightSide(rec))
+        slice = Central_slice()  
+        title_text7 = slice.get_title() 
+        self.buttons[6].configure(text=title_text7, command=lambda slice=slice: self.createRightSide(slice))
     
     
     def close_window(self):
@@ -110,6 +109,8 @@ class Wiki(Toplevel):
         elif some_topic.get_title() == "Dose":
             self.update_textbox(some_topic)
         elif some_topic.get_title() == "Sinogram":
+            self.update_textbox(some_topic)
+        elif some_topic.get_title() == "Central Slice Theorem":
             self.update_textbox(some_topic)
         else : 
             pass
